@@ -72,6 +72,12 @@
         <element>jobTitle</element>
         <scope_note>The job title of the person (for example, Financial Manager).</scope_note>
     </dc-type>
+
+    <dc-type>
+        <schema>person</schema>
+        <element>postnominals</element>
+        <scope_note>The person's academic postnominals.</scope_note>
+    </dc-type>
 	
     <!--
       OpenAIRE4 Guidelines

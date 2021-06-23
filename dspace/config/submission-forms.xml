@@ -419,6 +419,15 @@
             <row>
                 <field>
                     <dc-schema>person</dc-schema>
+                    <dc-element>postnominals</dc-element>
+                    <label>Academic Postnominals</label>
+                    <input-type>onebox</input-type>
+                    <hint>Enter the academic postnominals of the person</hint>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>person</dc-schema>
                     <dc-element>email</dc-element>
                     <label>Email</label>
                     <input-type>onebox</input-type>

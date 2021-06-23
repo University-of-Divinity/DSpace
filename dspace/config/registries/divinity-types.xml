@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dspace-dc-types>
+
+    <dspace-header>
+        <title>University of Divinity metadata</title>
+    </dspace-header>
+
+    <dc-schema>
+        <name>divinity</name>
+        <namespace>https://divinity.edu.au/schema/divinity</namespace>
+    </dc-schema>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>eprintsId</qualifier>
+        <scope_note>The original ePrints ID.</scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>eprintsUri</qualifier>
+        <scope_note>The original ePrints URI.</scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>researcherId</qualifier>
+        <scope_note>Used to identify a reseacher in administrative systems.</scope_note>
+    </dc-type>
+
+</dspace-dc-types>
