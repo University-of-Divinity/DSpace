@@ -389,13 +389,21 @@
 
         <!-- Form which defines the metadata page/section for depositing Person Entities -->
         <form name="personStep">
-            <row>
+            <!-- <row>
                 <relation-field>
                     <relationship-type>isPublicationOfAuthor</relationship-type>
                     <search-configuration>publication</search-configuration>
                     <label>Publication</label>
                     <hint>import a publicaton</hint>
                     <externalsources>pubmed</externalsources>
+                </relation-field>
+            </row> -->
+            <row>
+                <relation-field>
+                    <relationship-type>isOrgUnitOfPerson</relationship-type>
+                    <search-configuration>orgunit</search-configuration>
+                    <label>Org Unit</label>
+                    <hint>Which Organisational Unit the person belongs to.</hint>
                 </relation-field>
             </row>
             <row>
@@ -434,44 +442,17 @@
                     <hint>Enter the email of the person</hint>
                 </field>
             </row>
-            <!--     <row>-->
-            <!--     <field>-->
-            <!--       <dc-schema>person</dc-schema>-->
-            <!--       <dc-element>identifier</dc-element>-->
-            <!--       <dc-qualifier>orcid</dc-qualifier>-->
-            <!--       <label>Orcid</label>-->
-            <!--       <input-type>onebox</input-type>-->
-            <!--       <hint>Enter the orcid of the person</hint>-->
-            <!--     </field>-->
-            <!--     </row>-->
             <row>
                 <field>
                     <dc-schema>person</dc-schema>
-                    <dc-element>birthDate</dc-element>
-                    <label>Birth date</label>
-                    <input-type>date</input-type>
-                    <hint>Enter the birth date of the person</hint>
-                </field>
-            </row>
-<!--            <row>-->
-<!--                <field>-->
-<!--                    <dc-schema>person</dc-schema>-->
-<!--                    <dc-element>identifier</dc-element>-->
-<!--                    <dc-qualifier>staffid</dc-qualifier>-->
-<!--                    <label>Staff ID</label>-->
-<!--                    <input-type>onebox</input-type>-->
-<!--                    <hint>Enter the staff id of the person</hint>-->
-<!--                </field>-->
-<!--            </row>-->
-            <row>
-                <field>
-                    <dc-schema>person</dc-schema>
-                    <dc-element>jobTitle</dc-element>
-                    <label>Job title</label>
+                    <dc-element>identifier</dc-element>
+                    <dc-qualifier>orcid</dc-qualifier>
+                    <label>Open Researcher and Contributor ID (ORCID)</label>
                     <input-type>onebox</input-type>
-                    <hint>Enter the job title of the person</hint>
+                    <hint>Enter the ORCID of the person</hint>
                 </field>
             </row>
+
         </form>
 
         <!-- Form which defines the metadata page/section for depositing Project Entities -->

@@ -31,4 +31,61 @@
         <scope_note>Used to identify a reseacher in administrative systems.</scope_note>
     </dc-type>
 
+    <dc-type>
+        <schema>divinity</schema>
+        <element>status</element>
+        <qualifier>published</qualifier>
+        <scope_note>External submission status, such as 'Published', 'Unpublished', or 'In Press'.</scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>project</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>placeOfPublication</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>note</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>revision</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>thesisType</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>organisation</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>status</qualifier>
+        <scope_note></scope_note>
+    </dc-type>
+
+
 </dspace-dc-types>
