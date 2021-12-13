@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -129,12 +130,23 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
 
     @Override
     public Collection create(Context context, Community community, String handle)
-        throws SQLException, AuthorizeException {
+            throws SQLException, AuthorizeException {
+        return create(context, community, handle, null);
+    }
+
+    @Override
+    public Collection create(Context context, Community community,
+                             String handle, UUID uuid) throws SQLException, AuthorizeException {
         if (community == null) {
             throw new IllegalArgumentException("Community cannot be null when creating a new collection.");
         }
 
-        Collection newCollection = collectionDAO.create(context, new Collection());
+        Collection newCollection;
+        if (uuid != null) {
+            newCollection = collectionDAO.create(context, new Collection(uuid));
+        }  else {
+            newCollection = collectionDAO.create(context, new Collection());
+        }
         //Add our newly created collection to our community, authorization checks occur in THIS method
         communityService.addCollection(context, community, newCollection);
 
@@ -146,9 +158,10 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
         authorizeService.createResourcePolicy(context, newCollection, anonymousGroup, null, Constants.READ, null);
         // now create the default policies for submitted items
         authorizeService
-            .createResourcePolicy(context, newCollection, anonymousGroup, null, Constants.DEFAULT_ITEM_READ, null);
+                .createResourcePolicy(context, newCollection, anonymousGroup, null, Constants.DEFAULT_ITEM_READ, null);
         authorizeService
-            .createResourcePolicy(context, newCollection, anonymousGroup, null, Constants.DEFAULT_BITSTREAM_READ, null);
+                .createResourcePolicy(context, newCollection, anonymousGroup, null,
+                        Constants.DEFAULT_BITSTREAM_READ, null);
 
         collectionDAO.save(context, newCollection);
 
@@ -164,12 +177,12 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
         }
 
         context.addEvent(new Event(Event.CREATE, Constants.COLLECTION,
-                                   newCollection.getID(), newCollection.getHandle(),
-                                   getIdentifiers(context, newCollection)));
+                newCollection.getID(), newCollection.getHandle(),
+                getIdentifiers(context, newCollection)));
 
         log.info(LogHelper.getHeader(context, "create_collection",
-                                      "collection_id=" + newCollection.getID())
-                     + ",handle=" + newCollection.getHandle());
+                "collection_id=" + newCollection.getID())
+                + ",handle=" + newCollection.getHandle());
 
         return newCollection;
     }
@@ -907,8 +920,7 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
                                         int defaultRead)
         throws SQLException, AuthorizeException {
         Group role = groupService.create(context);
-        groupService.setName(role, "COLLECTION_" + collection.getID().toString() + "_" + typeOfGroupString +
-            "_DEFAULT_READ");
+        groupService.setName(role, getDefaultReadGroupName(collection, typeOfGroupString));
 
         // Remove existing privileges from the anonymous group.
         authorizeService.removePoliciesActionFilter(context, collection, defaultRead);
@@ -920,6 +932,12 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
     }
 
     @Override
+    public String getDefaultReadGroupName(Collection collection, String typeOfGroupString) {
+        return "COLLECTION_" + collection.getID().toString() + "_" + typeOfGroupString +
+            "_DEFAULT_READ";
+    }
+
+    @Override
     public List<Collection> findCollectionsWithSubmit(String q, Context context, Community community,
         int offset, int limit) throws SQLException, SearchServiceException {
 
@@ -928,7 +946,7 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
         discoverQuery.setDSpaceObjectFilter(IndexableCollection.TYPE);
         discoverQuery.setStart(offset);
         discoverQuery.setMaxResults(limit);
-        DiscoverResult resp = retrieveCollectionsWithSubmit(context, discoverQuery,community, q);
+        DiscoverResult resp = retrieveCollectionsWithSubmit(context, discoverQuery, null, community, q);
         for (IndexableObject solrCollections : resp.getIndexableObjects()) {
             Collection c = ((IndexableCollection) solrCollections).getIndexedObject();
             collections.add(c);
@@ -943,7 +961,7 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
         DiscoverQuery discoverQuery = new DiscoverQuery();
         discoverQuery.setMaxResults(0);
         discoverQuery.setDSpaceObjectFilter(IndexableCollection.TYPE);
-        DiscoverResult resp = retrieveCollectionsWithSubmit(context, discoverQuery,community,q);
+        DiscoverResult resp = retrieveCollectionsWithSubmit(context, discoverQuery, null, community, q);
         return (int)resp.getTotalSearchResults();
     }
 
@@ -951,9 +969,10 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
      * Finds all Indexed Collections where the current user has submit rights. If the user is an Admin,
      * this is all Indexed Collections. Otherwise, it includes those collections where
      * an indexed "submit" policy lists either the eperson or one of the eperson's groups
-     * 
+     *
      * @param context                    DSpace context
      * @param discoverQuery
+     * @param entityType                 limit the returned collection to those related to given entity type
      * @param community                  parent community, could be null
      * @param q                          limit the returned collection to those with metadata values matching the query
      *                                   terms. The terms are used to make also a prefix query on SOLR
@@ -963,7 +982,8 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
      * @throws SearchServiceException    if search error
      */
     private DiscoverResult retrieveCollectionsWithSubmit(Context context, DiscoverQuery discoverQuery,
-            Community community, String q) throws SQLException, SearchServiceException {
+        String entityType, Community community, String q)
+        throws SQLException, SearchServiceException {
 
         StringBuilder query = new StringBuilder();
         EPerson currentUser = context.getCurrentUser();
@@ -973,6 +993,7 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
                 userId = currentUser.getID().toString();
             }
             query.append("submit:(e").append(userId);
+
             Set<Group> groups = groupService.allMemberGroupsSet(context, currentUser);
             for (Group group : groups) {
                 query.append(" OR g").append(group.getID());
@@ -980,8 +1001,11 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
             query.append(")");
             discoverQuery.addFilterQueries(query.toString());
         }
-        if (community != null) {
+        if (Objects.nonNull(community)) {
             discoverQuery.addFilterQueries("location.comm:" + community.getID().toString());
+        }
+        if (StringUtils.isNotBlank(entityType)) {
+            discoverQuery.addFilterQueries("search.entitytype:" + entityType);
         }
         if (StringUtils.isNotBlank(q)) {
             StringBuilder buildQuery = new StringBuilder();
@@ -992,4 +1016,32 @@ public class CollectionServiceImpl extends DSpaceObjectServiceImpl<Collection> i
         DiscoverResult resp = searchService.search(context, discoverQuery);
         return resp;
     }
+
+    @Override
+    public List<Collection> findCollectionsWithSubmit(String q, Context context, Community community, String entityType,
+            int offset, int limit) throws SQLException, SearchServiceException {
+        List<Collection> collections = new ArrayList<>();
+        DiscoverQuery discoverQuery = new DiscoverQuery();
+        discoverQuery.setDSpaceObjectFilter(IndexableCollection.TYPE);
+        discoverQuery.setStart(offset);
+        discoverQuery.setMaxResults(limit);
+        DiscoverResult resp = retrieveCollectionsWithSubmit(context, discoverQuery,
+                entityType, community, q);
+        for (IndexableObject solrCollections : resp.getIndexableObjects()) {
+            Collection c = ((IndexableCollection) solrCollections).getIndexedObject();
+            collections.add(c);
+        }
+        return collections;
+    }
+
+    @Override
+    public int countCollectionsWithSubmit(String q, Context context, Community community, String entityType)
+            throws SQLException, SearchServiceException {
+        DiscoverQuery discoverQuery = new DiscoverQuery();
+        discoverQuery.setMaxResults(0);
+        discoverQuery.setDSpaceObjectFilter(IndexableCollection.TYPE);
+        DiscoverResult resp = retrieveCollectionsWithSubmit(context, discoverQuery, entityType, community, q);
+        return (int) resp.getTotalSearchResults();
+    }
+
 }
