@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.dspace</groupId>
         <artifactId>dspace-parent</artifactId>
-        <version>7.2-SNAPSHOT</version>
+        <version>7.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
@@ -558,13 +558,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <!-- Different version provided by hibernate-ehcache -->
-                <exclusion>
-                    <groupId>net.bytebuddy</groupId>
-                    <artifactId>byte-buddy</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
