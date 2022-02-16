@@ -76,7 +76,7 @@
      'dc.contributor.other' on the appropriate item with the values defined in the value-ref.
       This value-ref should be a bean of type VirtualMetadataConfiguration -->
     <util:map id="isOrgUnitOfPublicationMap">
-        <entry key="dc.contributor.other" value-ref="publicationOrgUnit_name"/>
+        <entry key="divinity.internal.organisation" value-ref="publicationOrgUnit_name"/>
     </util:map>
     <bean class="org.dspace.content.virtual.Collected" id="publicationOrgUnit_name">
         <property name="fields">
