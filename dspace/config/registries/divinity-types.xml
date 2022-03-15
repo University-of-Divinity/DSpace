@@ -87,5 +87,12 @@
         <scope_note></scope_note>
     </dc-type>
 
+    <dc-type>
+        <schema>divinity</schema>
+        <element>internal</element>
+        <qualifier>updated</qualifier>
+        <scope_note>When the record was last updated by the researcher (via custom front-end tool)</scope_note>
+    </dc-type>
+
 
 </dspace-dc-types>
