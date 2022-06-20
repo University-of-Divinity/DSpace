@@ -260,8 +260,21 @@ public class DSpaceApiExceptionControllerAdvice extends ResponseEntityExceptionH
                     exceptionMessage, location);
         }
 
+        //TODO: fetch from settings
+        boolean showCause = true;
+
+        String adjustedMessage = message;
+        if (showCause) {
+            Throwable rootCause = ex;
+            while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                rootCause = rootCause.getCause();
+            }
+            adjustedMessage = String.format("%s [CAUSE: %s]", message, rootCause.getMessage());
+        }
+
         //Exception properties will be set by org.springframework.boot.web.support.ErrorPageFilter
-        response.sendError(statusCode, message);
+        response.sendError(statusCode, adjustedMessage);
+
     }
 
 }
