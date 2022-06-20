@@ -25,6 +25,7 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.Context;
 import org.dspace.services.ConfigurationService;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.repository.support.QueryMethodParameterConversionException;
 import org.springframework.http.HttpHeaders;
@@ -260,16 +261,15 @@ public class DSpaceApiExceptionControllerAdvice extends ResponseEntityExceptionH
                     exceptionMessage, location);
         }
 
-        //TODO: fetch from settings
-        boolean showCause = true;
-
         String adjustedMessage = message;
-        if (showCause) {
+        String causeHeader = request.getHeader("X-DSPACE-REST-EXCEPTION-CAUSE");
+        if (causeHeader != null && causeHeader.equals("true")) {
             Throwable rootCause = ex;
             while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
                 rootCause = rootCause.getCause();
             }
-            adjustedMessage = String.format("%s [CAUSE: %s]", message, rootCause.getMessage());
+            String format = configurationService.getProperty("rest.exceptionCause.format", "%s [CAUSE: %s]");
+            adjustedMessage = String.format(format, message, rootCause.getMessage());
         }
 
         //Exception properties will be set by org.springframework.boot.web.support.ErrorPageFilter
