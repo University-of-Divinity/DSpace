@@ -47,6 +47,11 @@
         <name-map collection-handle="123456789/29" submission-name="JournalVolume"/>
         <name-map collection-handle="123456789/30" submission-name="JournalIssue"/>
         -->
+
+        <!-- DIVINITY -->
+        <name-map collection-handle="123456789/2" submission-name="OrgUnit"/>
+        <name-map collection-handle="123456789/3" submission-name="Person"/>
+
     </submission-map>
 
 
@@ -267,8 +272,8 @@
             <!-- Publications use a custom first step, but share page 2 with "traditional" Item form -->
             <step id="publicationStep"/>
             <step id="traditionalpagetwo"/>
-            <step id="upload"/>
-            <step id="license"/>
+            <!-- <step id="upload"/>
+            <step id="license"/> -->
         </submission-process>
 
         <!--
@@ -278,8 +283,8 @@
         <submission-process name="Person">
             <step id="collection"/>
             <step id="personStep"/>
-            <step id="upload"/>
-            <step id="license"/>
+            <!-- <step id="upload"/>
+            <step id="license"/> -->
         </submission-process>
 
         <!--
@@ -289,8 +294,8 @@
         <submission-process name="Project">
             <step id="collection"/>
             <step id="projectStep"/>
-            <step id="upload"/>
-            <step id="license"/>
+            <!-- <step id="upload"/>
+            <step id="license"/> -->
         </submission-process>
 
         <!--
@@ -300,8 +305,8 @@
         <submission-process name="OrgUnit">
             <step id="collection"/>
             <step id="orgUnitStep"/>
-            <step id="upload"/>
-            <step id="license"/>
+            <!-- <step id="upload"/>
+            <step id="license"/> -->
         </submission-process>
 
         <!--

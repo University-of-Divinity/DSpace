@@ -32,7 +32,19 @@
         <qualifier>latestForDiscovery</qualifier>
         <scope_note>Contains all uuids of PUBLICATIONS which link to the current AUTHOR via a "latest" relationship. In other words, this stores all relationships pointing to the current AUTHOR from any PUBLICATION, implying that the AUTHOR is marked as "latest". Internally used by DSpace to support versioning. Do not manually add, remove or edit values.</scope_note>
     </dc-type>
+  
+    <dc-type>
+        <schema>relation</schema>
+        <element>isEditorOfPublication</element>
+        <scope_note></scope_note>
+    </dc-type>
 
+    <dc-type>
+        <schema>relation</schema>
+        <element>isPublicationOfEditor</element>
+        <scope_note></scope_note>
+    </dc-type>
+    
     <dc-type>
         <schema>relation</schema>
         <element>isProjectOfPublication</element>

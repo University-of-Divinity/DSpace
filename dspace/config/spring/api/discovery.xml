@@ -182,6 +182,11 @@
                 <ref bean="searchFilterIsOrgUnitOfPublicationRelation"/>
                 <ref bean="searchFilterIsPublicationOfJournalIssueRelation"/>
                 <ref bean="searchFilterIsJournalOfPublicationRelation"/>
+
+                <ref bean="searchFilterStaff"/>
+                <ref bean="searchFilterIsEditorOfPublicationRelation"/>
+                <ref bean="searchFilterIsContributorOfPublicationRelation"/>
+                
             </list>
         </property>
         <!--The sort filters for the discovery search-->
@@ -193,6 +198,8 @@
                         <ref bean="sortTitle" />
                         <ref bean="sortDateIssued" />
                         <ref bean="sortDateAccessioned"/>
+                        <ref bean="sortType"/>
+                        <ref bean="sortAuthor"/>
                     </list>
                 </property>
             </bean>
@@ -2181,6 +2188,17 @@
         <property name="pageSize" value="10"/>
     </bean>
 
+    <bean id="searchFilterIsEditorOfPublicationRelation" class="org.dspace.discovery.configuration.DiscoverySearchFilter">
+        <property name="indexFieldName" value="isEditorOfPublication"/>
+        <property name="metadataFields">
+            <list>
+                <value>relation.isEditorOfPublication</value>
+            </list>
+        </property>
+        <property name="isOpenByDefault" value="false"/>
+        <property name="pageSize" value="10"/>
+    </bean>
+
     <bean id="searchFilterIsProjectOfPublicationRelation" class="org.dspace.discovery.configuration.DiscoverySearchFilter">
         <property name="indexFieldName" value="isProjectOfPublication"/>
         <property name="metadataFields">
@@ -2226,11 +2244,26 @@
         <property name="pageSize" value="10"/>
     </bean>
 
+    <bean id="searchFilterStaff" class="org.dspace.discovery.configuration.DiscoverySearchFilter">
+        <property name="indexFieldName" value="staff"/>
+        <property name="metadataFields">
+            <list>
+                <value>relation.isAuthorOfPublication</value>
+                <value>relation.isEditorOfPublication</value>
+                <value>relation.isContributorOfPublication</value>
+            </list>
+        </property>
+        <property name="isOpenByDefault" value="false"/>
+        <property name="pageSize" value="10"/>
+    </bean>
+
     <bean id="searchFilterAuthor" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
         <property name="indexFieldName" value="author"/>
         <property name="metadataFields">
             <list>
                 <value>dc.contributor.author</value>
+                <value>dc.contributor.editor</value>
+                <value>dc.contributor.other</value>
                 <value>dc.creator</value>
             </list>
         </property>
@@ -2846,4 +2879,13 @@
         <property name="defaultSortOrder" value="desc"/>
     </bean>
 
+    <bean id="sortType" class="org.dspace.discovery.configuration.DiscoverySortFieldConfiguration">
+        <property name="metadataField" value="dc.type"/>
+        <property name="defaultSortOrder" value="desc"/>
+    </bean>
+
+    <bean id="sortAuthor" class="org.dspace.discovery.configuration.DiscoverySortFieldConfiguration">
+        <property name="metadataField" value="dc.contributor.author"/>
+        <property name="defaultSortOrder" value="desc"/>
+    </bean>
 </beans>
