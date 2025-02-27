@@ -32,8 +32,6 @@ public class LinksetRest extends RestAddressableModel {
 
     @JsonInclude(Include.NON_EMPTY)
     private List<Linkset> linkset;
-    @JsonInclude(Include.NON_EMPTY)
-    private List<LinksetNode> linkSetNode;
 
     public List<Linkset> getLinkset() {
         if (this.linkset == null) {
@@ -45,20 +43,15 @@ public class LinksetRest extends RestAddressableModel {
         this.linkset = linkset;
     }
 
-    public List<LinksetNode> getLinksetNodes() {
-        if (this.linkSetNode == null) {
-            this.linkSetNode = new ArrayList<>();
-        }
-        return linkSetNode;
-    }
-    public void setLset(List<LinksetNode> linkSetNode) {
-        this.linkSetNode = linkSetNode;
-    }
-
     @JsonIgnore
     @Override
     public String getType() {
         return NAME;
+    }
+
+    @Override
+    public String getTypePlural() {
+        return PLURAL_NAME;
     }
 
     @Override

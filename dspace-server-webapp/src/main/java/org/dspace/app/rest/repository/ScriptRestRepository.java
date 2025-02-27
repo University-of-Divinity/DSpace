@@ -46,7 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * This is the REST repository dealing with the Script logic
  */
-@Component(ScriptRest.CATEGORY + "." + ScriptRest.NAME)
+@Component(ScriptRest.CATEGORY + "." + ScriptRest.PLURAL_NAME)
 public class ScriptRestRepository extends DSpaceRestRepository<ScriptRest, String> {
 
     private static final Logger log = LogManager.getLogger();
@@ -110,7 +110,7 @@ public class ScriptRestRepository extends DSpaceRestRepository<ScriptRest, Strin
                         + " and the specified parameters " + StringUtils.join(dSpaceCommandLineParameters, ", "));
             }
         } catch (IllegalArgumentException e) {
-            throw new DSpaceBadRequestException("missed handle");
+            throw new DSpaceBadRequestException("Illegal argoument " + e.getMessage(), e);
         }
         RestDSpaceRunnableHandler restDSpaceRunnableHandler = new RestDSpaceRunnableHandler(
             context.getCurrentUser(), scriptToExecute.getName(), dSpaceCommandLineParameters,

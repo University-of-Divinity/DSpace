@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.el.MethodNotFoundException;
 
+import jakarta.el.MethodNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -147,6 +147,8 @@ public class WOSImportMetadataSourceServiceImpl extends AbstractImportMetadataSo
                 String response = liveImportClient.executeHttpGetRequest(timeout, url, params);
 
                 SAXBuilder saxBuilder = new SAXBuilder();
+                // disallow DTD parsing to ensure no XXE attacks can occur
+                saxBuilder.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
                 Document document = saxBuilder.build(new StringReader(response));
                 Element root = document.getRootElement();
                 XPathExpression<Element> xpath = XPathFactory.instance().compile("//*[@name=\"RecordsFound\"]",
@@ -285,6 +287,8 @@ public class WOSImportMetadataSourceServiceImpl extends AbstractImportMetadataSo
     private List<Element> splitToRecords(String recordsSrc) {
         try {
             SAXBuilder saxBuilder = new SAXBuilder();
+            // disallow DTD parsing to ensure no XXE attacks can occur
+            saxBuilder.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
             Document document = saxBuilder.build(new StringReader(recordsSrc));
             Element root = document.getRootElement();
             String cData = XPathFactory.instance().compile("//*[@name=\"Records\"]",

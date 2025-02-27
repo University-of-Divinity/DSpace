@@ -11,11 +11,11 @@ package org.dspace.app.requestitem;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import javax.annotation.ManagedBean;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.mail.MessagingException;
 
+import jakarta.annotation.ManagedBean;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.mail.MessagingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dspace.app.requestitem.service.RequestItemService;
@@ -176,7 +176,7 @@ public class RequestItemEmailNotifier {
 
         // Build an email back to the requester.
         Email email = Email.getEmail(I18nUtil.getEmailFilename(context.getCurrentLocale(),
-                "request_item.granted"));
+                ri.isAccept_request() ? "request_item.granted" : "request_item.rejected"));
         email.addArgument(ri.getReqName()); // {0} requestor's name
         email.addArgument(handleService.getCanonicalForm(ri.getItem().getHandle())); // {1} URL of the requested Item
         email.addArgument(ri.getItem().getName()); // {2} title of the requested Item

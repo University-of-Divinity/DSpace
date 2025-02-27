@@ -95,7 +95,7 @@ public final class Utils {
     private static final SimpleDateFormat outFmtSecond
             = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ssZ");
 
-    // output format with millsecond precision
+    // output format with millisecond precision
     private static final SimpleDateFormat outFmtMillisec
             = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ");
 
@@ -413,7 +413,9 @@ public final class Utils {
      * @return metadata field key
      */
     public static String standardize(String schema, String element, String qualifier, String separator) {
-        if (StringUtils.isBlank(qualifier)) {
+        if (StringUtils.isBlank(element)) {
+            return null;
+        } else if (StringUtils.isBlank(qualifier)) {
             return schema + separator + element;
         } else {
             return schema + separator + element + separator + qualifier;
